@@ -47,7 +47,7 @@ void process_can(uint8_t can_number) {
 
     FDCAN_GlobalTypeDef *CANx = CANIF_FROM_CAN_NUM(can_number);
     uint8_t bus_number = BUS_NUM_FROM_CAN_NUM(can_number);
-    
+
     CANx->IR |= FDCAN_IR_TFE; // Clear Tx FIFO Empty flag
 
     if ((CANx->TXFQS & FDCAN_TXFQS_TFQF) == 0) {
@@ -69,7 +69,7 @@ void process_can(uint8_t can_number) {
           fifo->data_word[i] = to_send.data[(i*4)+0] | (to_send.data[(i*4)+1] << 8) | (to_send.data[(i*4)+2] << 16) | (to_send.data[(i*4)+3] << 24);
         }
 
-        CANx->TXBAR = (1UL << tx_index); 
+        CANx->TXBAR = (1UL << tx_index);
 
         // Send back to USB
         can_txd_cnt += 1;
@@ -176,7 +176,7 @@ void can_rx(uint8_t can_number) {
       current_board->set_led(LED_BLUE, true);
       can_send_errs += can_push(&can_rx_q, &to_push) ? 0U : 1U;
 
-      // update read index 
+      // update read index
       CANx->RXF0A = rx_fifo_idx;
     }
 
@@ -186,10 +186,10 @@ void can_rx(uint8_t can_number) {
     #endif
     CANx->IR |= (FDCAN_IR_PEA | FDCAN_IR_PED | FDCAN_IR_RF0L | FDCAN_IR_RF0F | FDCAN_IR_EW | FDCAN_IR_MRAF | FDCAN_IR_TOO); // Clean all error flags
     can_err_cnt += 1;
-  } else { 
-    
+  } else {
+
   }
-  
+
 }
 
 void FDCAN1_IT0_IRQ_Handler(void) { can_rx(0); }
